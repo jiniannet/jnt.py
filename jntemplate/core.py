@@ -8,8 +8,8 @@ import io
 __all__ = ["Tag", "TextTag", "VariableTag", "ValueTag",
            "SetTag", "ReferenceTag", "NullTag", "IncludeTag",
            "FunctionTag", "ForeachTag", "ExpressionTag", "EndTag",
-           "ElseifTag", "ElseTag", "IfTag","LoadTag", "TemplateContext",
-           "TemplateRender", "TemplateParser", "Template"]
+           "ElseifTag", "ElseTag", "IfTag", "LoadTag", "IndexTag",
+           "TemplateContext", "TemplateRender", "TemplateParser", "Template"]
 
 
 class Tag(metaclass=ABCMeta):
@@ -112,6 +112,24 @@ class VariableTag(SimpleTag):
 
     def execute(self, context):
         return context.data.get(self.name)
+
+
+class IndexTag(SimpleTag):
+    def __init__(self):
+        super(IndexTag, self).__init__()
+        self.name = None
+        self.key = None
+
+    def execute_for(self, base_value, context):
+        return self.execute_index(base_value, self.key)
+
+    def execute(self, context):
+        return self.execute_index(context.data.get(self.name), self.key)
+
+    def execute_index(self, data, key):
+        if data == None:
+            raise Exception("data cannet be null.")
+        return data[key]
 
 
 class ValueTag(BaseTag):

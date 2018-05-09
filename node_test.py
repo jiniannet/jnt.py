@@ -143,20 +143,6 @@ class Nodetest(unittest.TestCase):
         render = template.render()
         self.assertEqual("yes", render)
 
-    # def test_For(self):
-    #     text = "$for(i=1i<4i=i+1)${i}$end"
-    #     template = Template(text)
-    #     render = template.render()
-    #     self.assertEqual("123", render)
-
-
-#     def test_For1(self):
-#         text = "$for(i=0i<3i++)${i}$end"//"$for(i=1i<4i=i+1)${i}$end"
-#         template = Template(text)
-#         render = template.render()
-
-#         self.assertEqual("012", render)
-
     def test_reference(self):
         text = "$str.upper()"
         template = Template(text)
@@ -164,18 +150,20 @@ class Nodetest(unittest.TestCase):
         render = template.render()
         self.assertEqual("HELLO JNT4PY", render)
 
-#     /// <summary>
-#     /// 测试索引取值与方法标签
-#     /// </summary>
-#
-#     def test_IndexValue(self):
-#         text = "$data.Get(0)" //数组取值用get即可取到 List<Int32>用get_Item  原因见.NET的索引实现原理
-#         template = Template(text)
+    def test_list(self):
+        text = "$data[2]"
+        template = Template(text)
+        template.set("data", [7, 0, 2, 0, 6])
+        render = template.render()
+        self.assertEqual("2", render)
 
-#         template.set("data", new int[] { 7, 0, 2, 0, 6 })
-#         render = template.render()
-#         self.assertEqual("7", render)
-#     }
+    def test_tuple(self):
+        text = "$data[2]"
+        template = Template(text)
+        template.set("data", (7, 0, 2, 0, 6))
+        render = template.render()
+        self.assertEqual("2", render)
+
 
 #     /// <summary>
 #     /// 测试索引取值与方法标签

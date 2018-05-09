@@ -112,9 +112,9 @@ engine.configure()
 # template.set("str","hello jnt4py")
 # render = template.render()
 
-template = engine.load_template("README.md") 
+template = engine.create_template("$data[2]") 
+template.set("data", [7, 0, 2, 0, 6])
 render = template.render()
-
 print( render)
 
  

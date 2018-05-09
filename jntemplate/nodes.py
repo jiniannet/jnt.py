@@ -240,7 +240,7 @@ class Lexer(object):
     def allow_char(self, value):
         if value == None:
             return False
-        if value == '_' or value.isalnum():
+        if value == '_' or value.isalnum() or value == '[' or value==']':
             return True
         return False
 

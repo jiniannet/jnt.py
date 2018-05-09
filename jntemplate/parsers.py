@@ -2,14 +2,14 @@
 from abc import abstractclassmethod, ABCMeta
 from jntemplate.core import VariableTag, ValueTag, IfTag, ElseifTag, ElseTag, \
     ForeachTag, FunctionTag, ExpressionTag, SetTag, EndTag, TextTag, ReferenceTag,\
-    IncludeTag
+    IncludeTag,IndexTag
 import jntemplate.utility
 from jntemplate.nodes import TokenKind
 
 __all__ = ["VariableParser", "StringParser", "SetParser", "NumberParser",
            "LoadParser", "IncludeParser", "IfParser", "FunctionParser",
            "ForeachParser", "EndParser", "ElseifParser", "EleseParser", 
-           "BooleanParser", "ComplexParser"]
+           "BooleanParser","IndexParser", "ComplexParser"]
 
 
 class TagParser(object):
@@ -28,6 +28,22 @@ class VariableParser(TagParser):
             return tag
         return None
 
+class IndexParser(TagParser):
+    def parse(self, template_parser, tc):
+        if tc != None \
+                and len(tc) == 4 \
+                and tc[0].kind == TokenKind.text_data \
+                and tc[1].kind == TokenKind.left_bracket \
+                and (tc[2].kind == TokenKind.text_data or tc[2].kind == TokenKind.number) \
+                and tc[3].kind == TokenKind.right_bracket:
+            tag = IndexTag()
+            tag.name = tc[0].string()
+            if(tc[2].kind == TokenKind.text_data ):
+                tag.key = tc[2].string()
+            else:
+                tag.key = int(tc[2].string())
+            return tag
+        return None
 
 class StringParser(TagParser):
     def parse(self, template_parser, tc):

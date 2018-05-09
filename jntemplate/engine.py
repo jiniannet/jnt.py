@@ -11,7 +11,7 @@ import io
 from jntemplate.parsers import BooleanParser, NumberParser, EleseParser,\
     EndParser, VariableParser, StringParser, ForeachParser, VariableParser,\
     SetParser, IfParser, ElseifParser, LoadParser, IncludeParser, FunctionParser, \
-    ComplexParser, VariableParser
+    ComplexParser, VariableParser,IndexParser
 from abc import abstractclassmethod, ABCMeta
 import jntemplate.runtime
 
@@ -79,6 +79,7 @@ def _init_default_resolver():
     jntemplate.runtime.resolver.append(EleseParser())
     jntemplate.runtime.resolver.append(EndParser())
     jntemplate.runtime.resolver.append(VariableParser())
+    jntemplate.runtime.resolver.append(IndexParser())
     jntemplate.runtime.resolver.append(StringParser())
     jntemplate.runtime.resolver.append(ForeachParser())
     # resolver.append(VariableParser())

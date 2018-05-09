@@ -8,7 +8,7 @@ __all__ = ["environment", "data", "resolver", "loader",
            "resolve"]
 
 
-def resolve(parser, tc):
+def resolve(parser, tc): 
     for r in resolver:
         if r == None:
             continue
