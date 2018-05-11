@@ -438,9 +438,9 @@ class TemplateContext(object):
         self.data = data
         self.erros = []
         self.current_path = None
-        # Common.Utility.ToBoolean(Engine.GetEnvironmentVariable("ThrowErrors"));
+        # Common.utils.ToBoolean(Engine.GetEnvironmentVariable("ThrowErrors"));
         self.throw_errors = True
-        # Common.Utility.ToBoolean(Engine.GetEnvironmentVariable("StripWhiteSpace"));
+        # Common.utils.ToBoolean(Engine.GetEnvironmentVariable("StripWhiteSpace"));
         self.strip_white_space = True
         self.encoding = "utf-8"
 
@@ -491,7 +491,7 @@ class TemplateRender(object):
 
 class TemplateParser(object):
     def __init__(self, collection):
-        self.tokens = jntemplate.utility.clear_space_token(collection)
+        self.tokens = jntemplate.utils.clear_space_token(collection)
         self.tag = None
         self._index = 0
         self.reset()

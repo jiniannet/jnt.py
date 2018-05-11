@@ -3,7 +3,7 @@ from abc import abstractclassmethod, ABCMeta
 from jntemplate.core import VariableTag, ValueTag, IfTag, ElseifTag, ElseTag, \
     ForeachTag, FunctionTag, ExpressionTag, SetTag, EndTag, TextTag, ReferenceTag,\
     IncludeTag,IndexTag
-import jntemplate.utility
+import jntemplate.utils
 from jntemplate.nodes import TokenKind
 
 __all__ = ["VariableParser", "StringParser", "SetParser", "NumberParser",
@@ -144,7 +144,7 @@ class IfParser(TagParser):
             #n = len(tc)
             if tc[1].kind != TokenKind.left_parentheses \
                     or tc[-1].kind != TokenKind.right_parentheses:
-                raise Exception("syntax error near :%s line:%d col:%d" % jntemplate.utility.token_concat(
+                raise Exception("syntax error near :%s line:%d col:%d" % jntemplate.utils.token_concat(
                     tc) % tc[0].begin_line % tc[0].begin_column)
             tag = IfTag()
             child_tag = ElseifTag()
@@ -163,7 +163,7 @@ class IfParser(TagParser):
                 else:
                     tag.children[-1].add_child(template_parser.tag)
             raise Exception("if is not properly closed by a end tag:%s line:%d col:%d" %
-                            jntemplate.utility.token_concat(tc) % tc[0].begin_line % tc[0].begin_column)
+                            jntemplate.utils.token_concat(tc) % tc[0].begin_line % tc[0].begin_column)
 
         return None
 
@@ -226,7 +226,7 @@ class ForeachParser(TagParser):
                 if isinstance(template_parser.tag, EndTag):
                     return tag
             raise Exception("foreach is not properly closed by a end tag:%s line:%d col:%d" %
-                            jntemplate.utility.token_concat(tc) % tc[0].begin_line % tc[0].begin_column)
+                            jntemplate.utils.token_concat(tc) % tc[0].begin_line % tc[0].begin_column)
 
 
 class EndParser(TagParser):
@@ -303,7 +303,7 @@ class ComplexParser(TagParser):
                     if pos > 0:
                         pos -= 1
                     else:
-                        raise Exception("syntax error near ):%s  line:%d  col:%d" % jntemplate.utility.token_concat(
+                        raise Exception("syntax error near ):%s  line:%d  col:%d" % jntemplate.utils.token_concat(
                             tc) % tc[0].begin_line % tc[0].begin_column)
                     if pos == 0:
                         if not is_func:
@@ -320,7 +320,7 @@ class ComplexParser(TagParser):
                     data.append(tc[i])
                 if i == len(tc) - 1 and end >= start:
                     if start == 0 and end == i:
-                        raise Exception("Unexpected  tag:%s line:%d col:%d" % jntemplate.utility.token_concat(
+                        raise Exception("Unexpected  tag:%s line:%d col:%d" % jntemplate.utils.token_concat(
                             tc) % tc[0].begin_line % tc[0].begin_column)
                     queue.append(tc[start: end+1])
                     data.append(None)
@@ -337,7 +337,7 @@ class ComplexParser(TagParser):
                     del queue[0]
                 elif data[i].kind == TokenKind.dot:
                     if len(tags) == 0 or i == len(data) - 1 or data[i + 1] != None:
-                        raise Exception("syntax error near :%s line:%d col:%d" % jntemplate.utility.token_concat(
+                        raise Exception("syntax error near :%s line:%d col:%d" % jntemplate.utils.token_concat(
                             tc) % tc[0].begin_line % tc[0].begin_column)
                     if isinstance(tags[-1], ReferenceTag):
                         tags[-1].add_child(template_parser.read(queue[0]))

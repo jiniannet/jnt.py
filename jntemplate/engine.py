@@ -4,15 +4,12 @@
 # resource_directories
 from jntemplate.nodes import Token, FlagMode, TokenKind, VariableScope, Lexer
 from jntemplate.core import TextTag, TemplateContext, Template
-from jntemplate.loaders import FileLoader, BaseLoader
-import jntemplate.utility
-import jntemplate.defaults
-import io
+from jntemplate.loaders import FileLoader, BaseLoader 
+import jntemplate.defaults 
 from jntemplate.parsers import BooleanParser, NumberParser, EleseParser,\
     EndParser, VariableParser, StringParser, ForeachParser, VariableParser,\
     SetParser, IfParser, ElseifParser, LoadParser, IncludeParser, FunctionParser, \
-    ComplexParser, VariableParser,IndexParser
-from abc import abstractclassmethod, ABCMeta
+    ComplexParser, VariableParser,IndexParser 
 import jntemplate.runtime
 
 

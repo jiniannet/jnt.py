@@ -240,7 +240,7 @@ class Lexer(object):
     def allow_char(self, value):
         if value == None:
             return False
-        if value == '_' or value.isalnum() or value == '[' or value==']':
+        if value == '_' or value.isalnum():
             return True
         return False
 
@@ -261,7 +261,8 @@ class Lexer(object):
                         return False
                 else:
                     val = self._scanner.read()
-                    if ((val == '(' or self.allow_char(val)) and self.allow_char(self._scanner.read(-1))) or (self.allow_char(val) and (self._scanner.read(-1) == '.')):
+                    if ((val == '(' or val == '[' or self.allow_char(val)) and self.allow_char(self._scanner.read(-1))) \
+                            or (self.allow_char(val) and (self._scanner.read(-1) == '.')):
                         return False
                     return True
         return False
@@ -282,8 +283,10 @@ class Lexer(object):
                         self.add_token(kind)
                         if self._kind == TokenKind.string_start:
                             self._pos.append('"')
-                        if self._kind == TokenKind.left_parentheses:
+                        elif self._kind == TokenKind.left_parentheses:
                             self._pos.append("(")
+                        elif self._kind == TokenKind.left_bracket:
+                            self._pos.append("[")
                     self.read_token()
                 elif self._is_tag_start():
                     self.add_token(TokenKind.tag_start)
@@ -360,9 +363,10 @@ class Lexer(object):
             if self._kind == TokenKind.string:
                 continue
 
-            if self._scanner.read() == '(':
-                self._pos.append("(")
-            elif self._scanner.read() == ')' and len(self._pos) > 0 and self._pos[-1] == "(":
+            if self._scanner.read() == '(' or self._scanner.read() == '[':
+                self._pos.append(self._scanner.read())
+            elif (self._scanner.read() == ')' and len(self._pos) > 0 and self._pos[-1] == "(") \
+                    or (self._scanner.read() == ']' and len(self._pos) > 0 and self._pos[-1] == "["):
                 self._pos.pop()
                 # if self._pos.count == 1:
             elif self.read_end_token():
@@ -455,5 +459,3 @@ class VariableScope(object):
 
     def remove(self, key):
         return self._dict.pop(key)
-
-
