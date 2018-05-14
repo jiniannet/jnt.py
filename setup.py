@@ -1,25 +1,27 @@
 from setuptools import setup, find_packages
+import io
+
+with io.open('README.md', 'rt', encoding='utf8') as f:
+    readme = f.read()
 
 setup(
-    name='jntemplate',
-    version=0.1,
-    description=(
-        '<项目的简单描述>'
-    ),
-    long_description=open('README.rst').read(),
+    name='jnt.py',
+    version='0.1 Beta',
+    description='Open source templating engine for python.',
+    long_description=readme,
     author='jiniannet',
     author_email='hnvvv@163.com',
     maintainer='jiniannet',
     maintainer_email='hnvvv@163.com',
     license='MIT License',
-    packages=find_packages(),
+    packages=['jntemplate'],
     platforms=["all"],
     url='http://www.jiniannet.com',
     classifiers=[
         'Development Status :: 4 - Beta',
         'Operating System :: OS Independent',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: Implementation',
         'Programming Language :: Python :: 2',

@@ -446,7 +446,7 @@ $key5"
         template = Template(text)
         #template.Context.StripWhiteSpace = true
         render = template.render()
-        self.assertEqual("your data is:5.0", render)
+        self.assertEqual("your data is:5", render)
 
 
 #     ///// <summary>

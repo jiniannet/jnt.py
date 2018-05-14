@@ -117,16 +117,16 @@ class VariableTag(SimpleTag):
 class IndexTag(SimpleTag):
     def __init__(self):
         super(IndexTag, self).__init__()
-        self.name = None
-        self.key = None
+        self.container = None
+        self.index = None
 
     def execute_for(self, base_value, context):
-        return self.execute_index(base_value, self.key)
+        return self.execute_index(self.container.execute_for(base_value,context), self.index.execute(context))
 
     def execute(self, context):
-        return self.execute_index(context.data.get(self.name), self.key)
+        return self.execute_index( self.container.execute(context), self.index.execute(context))
 
-    def execute_index(self, data, key):
+    def execute_index(self, data, key): 
         if data == None:
             raise Exception("data cannet be null.")
         return data[key]
@@ -309,13 +309,6 @@ class FunctionTag(SimpleTag):
             return func(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9])
 
         raise Exception("too many arguments.")
-        # arr = []
-        # for i in range(n):
-        #     arr.append("args["+str(i)+"]")
-        # arr[0] = "func(" + arr[0]
-        # arr[n-1] = arr[n-1]+")"
-        # return eval(",".join(arr))
-        # Object result = context.TempData[this._name];
 
     def execute(self, context):
         args = self._get_args(context)

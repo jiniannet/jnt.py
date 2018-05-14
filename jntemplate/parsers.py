@@ -2,14 +2,14 @@
 from abc import abstractclassmethod, ABCMeta
 from jntemplate.core import VariableTag, ValueTag, IfTag, ElseifTag, ElseTag, \
     ForeachTag, FunctionTag, ExpressionTag, SetTag, EndTag, TextTag, ReferenceTag,\
-    IncludeTag,IndexTag
+    IncludeTag, IndexTag
 import jntemplate.utils
 from jntemplate.nodes import TokenKind
 
 __all__ = ["VariableParser", "StringParser", "SetParser", "NumberParser",
            "LoadParser", "IncludeParser", "IfParser", "FunctionParser",
-           "ForeachParser", "EndParser", "ElseifParser", "EleseParser", 
-           "BooleanParser","IndexParser", "ComplexParser"]
+           "ForeachParser", "EndParser", "ElseifParser", "EleseParser",
+           "BooleanParser", "IndexParser", "ComplexParser"]
 
 
 class TagParser(object):
@@ -28,22 +28,39 @@ class VariableParser(TagParser):
             return tag
         return None
 
+
 class IndexParser(TagParser):
     def parse(self, template_parser, tc):
         if tc != None \
-                and len(tc) == 4 \
-                and tc[0].kind == TokenKind.text_data \
-                and tc[1].kind == TokenKind.left_bracket \
-                and (tc[2].kind == TokenKind.text_data or tc[2].kind == TokenKind.number) \
-                and tc[3].kind == TokenKind.right_bracket:
+                and len(tc) > 3 \
+                and tc[-1].kind == TokenKind.right_bracket:
+            y = len(tc) - 1
+            x = -1
+            pos = 0
+            i = y
+
+            while i >= 0:
+                if tc[i].kind == TokenKind.dot and pos == 0:
+                    return None
+                if tc[i].kind == TokenKind.right_bracket:
+                    pos += 1
+                    i -= 1
+                    continue
+                if tc[i].kind == TokenKind.left_bracket:
+                    pos -= 1
+                    if pos == 0 and x == -1:
+                        x = i
+                i -= 1
+
+            if x == -1:
+                return None
+
             tag = IndexTag()
-            tag.name = tc[0].string()
-            if(tc[2].kind == TokenKind.text_data ):
-                tag.key = tc[2].string()
-            else:
-                tag.key = int(tc[2].string())
+            tag.container = template_parser.read(tc[0: x])
+            tag.index = template_parser.read(tc[x + 1: y])
             return tag
         return None
+
 
 class StringParser(TagParser):
     def parse(self, template_parser, tc):
@@ -107,9 +124,9 @@ class NumberParser(TagParser):
                 and tc[0].kind == TokenKind.number:
             tag = ValueTag()
             if tc[0].text.find('.') == -1:
-                tag.value = float(tc[0].text)
-            else:
                 tag.value = int(tc[0].text)
+            else:
+                tag.value = float(tc[0].text)
             return tag
 
         return None
@@ -130,9 +147,8 @@ class IncludeParser(TagParser):
                 and tc[1].TokenKind == TokenKind.left_parentheses \
                 and tc[-1].TokenKind == TokenKind.right_parentheses:
             tag = IncludeTag()
-            tag.path =  template_parser.read(tc[2:-1])
+            tag.path = template_parser.read(tc[2:-1])
             return tag
-
 
 
 class IfParser(TagParser):
@@ -141,7 +157,7 @@ class IfParser(TagParser):
                 and template_parser != None \
                 and len(tc) > 3 \
                 and tc[0].text == "if":
-            #n = len(tc)
+            # n = len(tc)
             if tc[1].kind != TokenKind.left_parentheses \
                     or tc[-1].kind != TokenKind.right_parentheses:
                 raise Exception("syntax error near :%s line:%d col:%d" % jntemplate.utils.token_concat(
