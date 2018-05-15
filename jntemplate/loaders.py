@@ -32,10 +32,7 @@ class FileLoader(BaseLoader):
     def get_directory(self, path):
         return os.path.dirname(path)
 
-    def parse_path(self, res_file):
-        # print("sss..ss".index('..'))
-        # print(type("sss..ss"))
-        # print(str(res_file).index('..'))
+    def parse_path(self, res_file): 
         if res_file == None or res_file.startswith(".."):
             return None
         return res_file.replace("/", os.sep)
@@ -50,8 +47,7 @@ class FileLoader(BaseLoader):
             if paths[i][-1] == os.sep:
                 full = paths[i]  + name
             else:
-                full = paths[i] + os.sep+ name
-            print (full)
+                full = paths[i] + os.sep+ name 
             if os.path.exists(full) and os.path.isfile(full):
                 return i, full
         return -1, None

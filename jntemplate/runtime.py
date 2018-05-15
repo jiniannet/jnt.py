@@ -26,3 +26,14 @@ def resolve(parser, tc):
                     t.last = tc[-1]
             return t
     return None
+
+def _get_environment_variable(name):
+    if name == None:
+        return None
+    return environment.get(name.lower())
+
+
+def _set_environment_variable(name,  value):
+    if name == None:
+        return None 
+    environment[name.lower()] = value 

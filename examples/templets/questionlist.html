@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>$site.title</title>
+    ${load("public/meta.html")}
+</head>
+
+<body role="document">
+    $load("public/header.html")
+
+    $set(product = func.get_product_item("4"))
+
+    <div class="wrapper">
+        $load("sidebar.html")
+
+        $set(type=func.get_default_int("",1))
+        <div class="help-hd">
+            <div class="hd-mod">
+                <h1>$product.title</h1>
+                <dl>
+                    <dt>功能模块：</dt>
+                    $foreach(row in func.get_product_module(id))
+                    <dd><a href='#${row.product_module_id}'>$row.module_name</a></dd>
+                    $end
+                </dl>
+            </div>
+            <div class="hd-tbl">
+                <ul class="hd-tbl-head" id="tblHead">
+                    <li><a href="?tag=1">热门问题</a></li>
+                    <li><a href="?tag=2">最新推荐</a></li>
+                    <li><a href="?tag=3">最新提问</a></li>
+                </ul>
+
+                $set(list=func.get_help_list(product.category_id,id,0,type))
+                <div class="help-items">
+                    <ul>
+                        $foreach(row in list)
+                        <li><a href="$func.get_help_url(row)">$row.title</a></li>
+                        $end
+                    </ul>
+                </div>
+
+            </div>
+            <div class="aspnet-pager">
+                $func.GetPager()
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+
+    ${load("public/footer.html")}
+</body>
+</html>

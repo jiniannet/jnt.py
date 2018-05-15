@@ -4,18 +4,21 @@
 # resource_directories
 from jntemplate.nodes import Token, FlagMode, TokenKind, VariableScope, Lexer
 from jntemplate.core import TextTag, TemplateContext, Template
-from jntemplate.loaders import FileLoader, BaseLoader 
-import jntemplate.defaults 
+from jntemplate.loaders import FileLoader, BaseLoader
+import jntemplate.defaults
 from jntemplate.parsers import BooleanParser, NumberParser, EleseParser,\
     EndParser, VariableParser, StringParser, ForeachParser, VariableParser,\
     SetParser, IfParser, ElseifParser, LoadParser, IncludeParser, FunctionParser, \
-    ComplexParser, VariableParser,IndexParser 
+    ComplexParser, VariableParser, IndexParser
 import jntemplate.runtime
 
+__all__ = ["configure", "set_loder", "create_context",
+           "create", "load", "get_environment_variable",
+           "set_environment_variable"]
 
 def configure(**conf):
     _init_default_resolver()
-    jntemplate.runtime.environment.update(jntemplate.defaults.engine_conf)
+    jntemplate.runtime.environment.update(jntemplate.defaults.engine_conf) 
     if "data" in conf and isinstance(conf["data"], VariableScope):
         jntemplate.runtime.data = conf["data"]
         del conf["data"]
@@ -42,11 +45,11 @@ def create_context():
     return ctx
 
 
-def create_template(text):
+def create(text):
     return Template(text, create_context())
 
 
-def load_template(path, ctx=None):
+def load(path, ctx=None):
     if ctx == None:
         ctx = create_context()
     html, full = jntemplate.runtime.loader.load(path, ctx.encoding)
@@ -58,15 +61,11 @@ def load_template(path, ctx=None):
 
 
 def get_environment_variable(name):
-    if name == None:
-        return None 
-    return jntemplate.runtime.environment.get(name.upper())
+    return jntemplate.runtime._get_environment_variable(name)
 
 
-def set_environment_variable(name,  value):
-    if name == None:
-        return None
-    jntemplate.runtime.environment[name.upper()] = value
+def set_environment_variable(name,  value): 
+    jntemplate.runtime._set_environment_variable(name,  value)
 
 
 def _init_default_resolver():

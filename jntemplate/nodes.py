@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from enum import Enum
+from jntemplate.runtime import _get_environment_variable 
 
 __all__ = ["Token", "OperatorElement", "TokenKind", "FlagMode",
            "Scanner", "Lexer", "VariableScope"]
@@ -177,9 +178,9 @@ class Scanner(object):
 class Lexer(object):
     def __init__(self, text):
         self._document = text
-        self._prefix = "${"  # get_environment_variable("TagPrefix")
-        self._flag = "$"  # get_environment_variable("TagFlag")
-        self._suffix = "}"  # get_environment_variable("TagSuffix")
+        self._prefix = _get_environment_variable("prefix")
+        self._flag = _get_environment_variable("flag")
+        self._suffix = _get_environment_variable("suffix") 
         self.reset()
 
     def reset(self):
