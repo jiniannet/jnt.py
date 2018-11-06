@@ -410,6 +410,8 @@ if __name__ == '__main__':
     db = DbRead()
     loader.directories.append(os.getcwd()+'\\templets\\')
     loader.directories.append(os.getcwd()+'\\templets\\public\\')
+
+    print(os.getcwd()+'\\templets\\')
  
     engine.configure(loader=loader) 
     template = engine.load("questionlist.html")

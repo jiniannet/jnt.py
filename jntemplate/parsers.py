@@ -2,7 +2,7 @@
 from abc import abstractclassmethod, ABCMeta
 from jntemplate.core import VariableTag, ValueTag, IfTag, ElseifTag, ElseTag, \
     ForeachTag, FunctionTag, ExpressionTag, SetTag, EndTag, TextTag, ReferenceTag,\
-    IncludeTag, IndexTag
+    IncludeTag, IndexTag, LoadTag
 import jntemplate.utils
 from jntemplate.nodes import TokenKind
 
@@ -69,7 +69,7 @@ class StringParser(TagParser):
                 and tc[0].kind == TokenKind.string_start \
                 and tc[1].kind == TokenKind.string \
                 and tc[2].kind == TokenKind.string_end:
-            tag = ValueTag()
+            tag = ValueTag() 
             tag.value = tc[1].text
             return tag
         return None
@@ -135,7 +135,15 @@ class NumberParser(TagParser):
 class LoadParser(TagParser):
 
     def parse(self, template_parser, tc):
-        return None
+        if tc != None \
+                and template_parser != None \
+                and len(tc) > 2 \
+                and tc[0].text == "load" \
+                and tc[1].kind == TokenKind.left_parentheses \
+                and tc[-1].kind == TokenKind.right_parentheses:
+            tag = LoadTag()
+            tag.path = template_parser.read(tc[2:-1]) 
+            return tag
 
 
 class IncludeParser(TagParser):
@@ -144,8 +152,8 @@ class IncludeParser(TagParser):
                 and template_parser != None \
                 and len(tc) > 2 \
                 and tc[0].text == "include" \
-                and tc[1].TokenKind == TokenKind.left_parentheses \
-                and tc[-1].TokenKind == TokenKind.right_parentheses:
+                and tc[1].kind == TokenKind.left_parentheses \
+                and tc[-1].kind == TokenKind.right_parentheses:
             tag = IncludeTag()
             tag.path = template_parser.read(tc[2:-1])
             return tag

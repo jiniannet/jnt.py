@@ -121,12 +121,12 @@ class IndexTag(SimpleTag):
         self.index = None
 
     def execute_for(self, base_value, context):
-        return self.execute_index(self.container.execute_for(base_value,context), self.index.execute(context))
+        return self.execute_index(self.container.execute_for(base_value, context), self.index.execute(context))
 
     def execute(self, context):
-        return self.execute_index( self.container.execute(context), self.index.execute(context))
+        return self.execute_index(self.container.execute(context), self.index.execute(context))
 
-    def execute_index(self, data, key): 
+    def execute_index(self, data, key):
         if data == None:
             raise Exception("data cannet be null.")
         return data[key]
@@ -229,7 +229,7 @@ class BlockTag(BaseTag):
 
 
 class LoadTag(BlockTag):
-    def __init__(self):
+    def __init__(self): 
         super(LoadTag, self).__init__()
         self.path = None
         # super().aa()
@@ -238,13 +238,13 @@ class LoadTag(BlockTag):
         self.load_resource(context)
         super().execute(context)
 
-    def parse(self, context, output):
+    def parse(self, context, output): 
         self.load_resource(context)
         super().parse(context, output)
 
     def load_resource(self, context):
         if self.path != None:
-            p = str(self.path.execute(context))
+            p = str(self.path.execute(context)) 
             text, full = jntemplate.runtime.loader.load(
                 p, context.encoding, context.current_path)
             if full == None:
@@ -286,29 +286,8 @@ class FunctionTag(SimpleTag):
             return None
         if args == None or len(args) == 0:
             return func()
-        n = len(args)
-        if n == 1:
-            return func(args[0])
-        if n == 2:
-            return func(args[0], args[1])
-        if n == 3:
-            return func(args[0], args[1], args[2])
-        if n == 4:
-            return func(args[0], args[1], args[2], args[3])
-        if n == 5:
-            return func(args[0], args[1], args[2], args[3], args[4])
-        if n == 6:
-            return func(args[0], args[1], args[2], args[3], args[4], args[5])
-        if n == 7:
-            return func(args[0], args[1], args[2], args[3], args[4], args[5], args[6])
-        if n == 8:
-            return func(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7])
-        if n == 9:
-            return func(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8])
-        if n == 10:
-            return func(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9])
-
-        raise Exception("too many arguments.")
+        return func(*args)
+        #raise Exception("too many arguments.")
 
     def execute(self, context):
         args = self._get_args(context)

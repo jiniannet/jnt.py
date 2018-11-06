@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from jntemplate import Template,engine,BaseLoader,FileLoader
+from jntemplate import Template,engine,BaseLoader,FileLoader,engine
 from timeit import timeit
 import time
 #from jntemplate import Lexer
@@ -112,7 +112,7 @@ engine.configure()
 # template.set("str","hello jnt4py")
 # render = template.render()
 
-template = engine.create_template("$data[2]") 
+template =  engine.create("$data[2]") 
 template.set("data", [7, 0, 2, 0, 6])
 render = template.render()
 print( render)

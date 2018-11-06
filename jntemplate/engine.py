@@ -84,6 +84,7 @@ def _init_default_resolver():
     jntemplate.runtime.resolver.append(ElseifParser())
     # resolver.append(LoadParser())
     jntemplate.runtime.resolver.append(IncludeParser())
+    jntemplate.runtime.resolver.append(LoadParser())
     jntemplate.runtime.resolver.append(FunctionParser())
     jntemplate.runtime.resolver.append(ComplexParser())
     # resolver.append(VariableParser())

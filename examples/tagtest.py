@@ -110,6 +110,13 @@ class Nodetest(unittest.TestCase):
         render = template.render()
         self.assertEqual("2<5 success", render)
 
+    def test_if1(self):
+        text = "${if(3==row.id)}true${else}false${end}"
+        template = engine.create(text)
+        template.set("entity",{ "key":"111" })
+        render = template.render()
+        self.assertEqual("false", render)
+
     # def test_if1(self):
     #     text = "$if(CreteDate >= date.AddDays(-3))yes$end" //数组取值用get即可取到 List<Int32>用get_Item  见.NET的索引实现原理
     #     template = engine.create(text)
